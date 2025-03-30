@@ -1,0 +1,3 @@
+2 GB Parquet file: https://cspolybasepublic.blob.core.windows.net/cstrainingpublicdata/ChicagoParkingTickets.parquet
+122 MB sample CSV file: https://cspolybasepublic.blob.core.windows.net/cstrainingpublicdata/ChicagoParkingTickets.txt
+
