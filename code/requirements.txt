@@ -1,8 +1,6 @@
-streamlit
 duckdb
 pandas
 polars
 numpy
 pyodbc
 matplotlib
-plotly.express
