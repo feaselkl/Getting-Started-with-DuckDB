@@ -1,0 +1,12 @@
+[project]
+name = "getting-started-with-duckdb"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb",
+    "pandas",
+    "polars",
+    "numpy",
+    "pyodbc",
+    "matplotlib",
+]

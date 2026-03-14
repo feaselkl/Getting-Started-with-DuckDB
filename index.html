@@ -142,9 +142,7 @@
 				<section data-background-image="presentation/assets/background/duck-looking.jpg" data-background-opacity="0.2">
 					<h3>Level-Setting Expectations</h3>
 
-					<p>DuckDB is <strong>NOT</strong> a replacement for enterprise database systems! It is not well-suited for heavy
-						transactional processing, does not allow multiple connections, has no concept of role-based access control or logins, and 
-						must run in your local environment or container.</p>
+					<p>DuckDB is <strong>NOT</strong> a replacement for enterprise database systems! It is not well-suited for heavy transactional processing, has no concept of role-based access control or logins, and must run in your local environment or container.</p>
 				</section>
 
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
@@ -215,6 +213,73 @@
 					</p>
 				</section>
 
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>DuckDB Local UI</h3>
+
+					<p>As of DuckDB 1.2.1, you can launch a local web-based notebook UI directly from the CLI:</p>
+
+					<pre><code data-trim><script type="text/template">
+						duckdb -ui
+						-- Or from within a session:
+						CALL start_ui();
+					</script></code></pre>
+
+					<p>This opens a notebook interface at <code>http://localhost:4213</code> with syntax highlighting, autocomplete, and a column explorer. All queries run locally, so no data leaves your machine.</p>
+				</section>
+
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>SQL Server Extension</h3>
+
+					<p>The community <code>mssql</code> extension provides native TDS protocol connectivity to SQL Server, with no ODBC or JDBC drivers required.</p>
+
+					<pre><code data-trim><script type="text/template">
+						INSTALL mssql FROM community;
+						LOAD mssql;
+
+						CREATE SECRET mssql_secret (
+							TYPE mssql,
+							HOST 'my-server.database.windows.net',
+							PORT 1433,
+							DATABASE 'mydb',
+							UID 'myuser',
+							PWD 'mypassword'
+						);
+
+						ATTACH '' AS sqldb (TYPE mssql, SECRET mssql_secret);
+						SELECT * FROM sqldb.dbo.MyTable;
+					</script></code></pre>
+				</section>
+
+				<section data-background-image="presentation/assets/background/mallard-swimming.jpg" data-background-opacity="0.2">
+					<h3>SQL Server Extension Features</h3>
+
+					<ul>
+						<li>Filter and projection pushdown&mdash;queries are optimized at SQL Server, not just locally</li>
+						<li class="fragment">INSERT, UPDATE, DELETE, and CREATE TABLE AS SELECT</li>
+						<li class="fragment">BCP bulk loading via native TDS protocol (~1.2M rows/sec)</li>
+						<li class="fragment">Azure Entra ID authentication (Service Principal, CLI, Device Code)</li>
+						<li class="fragment">Works with Azure SQL Database and Microsoft Fabric</li>
+					</ul>
+				</section>
+
+				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
+					<h3>MERGE INTO</h3>
+
+					<p>As of DuckDB 1.4.0, DuckDB supports the <code>MERGE INTO</code> statement for upsert operations, with full UPDATE, INSERT, DELETE, and a RETURNING clause.</p>
+
+					<pre><code data-trim><script type="text/template">
+						MERGE INTO target AS t
+						USING source AS s
+						ON t.id = s.id
+						WHEN MATCHED THEN
+							UPDATE SET t.val = s.val
+						WHEN NOT MATCHED THEN
+							INSERT (id, val) VALUES (s.id, s.val);
+					</script></code></pre>
+
+					<p>This should be very familiar to anyone coming from T-SQL!</p>
+				</section>
+
 				<section data-background-image="presentation/assets/background/demo.jpg" data-background-opacity="0.2">
 					<h3>Demo Time</h3>
 				</section>
@@ -249,7 +314,7 @@
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
 					<h3>Available Settings</h3>
 
-					<p>DuckDB, as of April 2025, has over 100 separate settings available and <a href="https://duckdb.org/docs/stable/configuration/overview.html">documented on their website</a>.
+					<p>DuckDB, as of March 2026, has over 100 separate settings available and <a href="https://duckdb.org/docs/stable/configuration/overview.html">documented on their website</a>.
 						You can see your current settings using the following command:</p>
 
 					<pre><code data-trim><script type="text/template">
@@ -276,7 +341,7 @@
 					<h3>Managing Secrets</h3>
 
 					<p>The type of secrets you can store will depend upon which extensions you have installed.
-						The set of secrets available as of April 2025 include:</p>
+						The set of secrets available as of March 2026 include:</p>
 
 					<ul>
 						<li>Azure Blob Storage (azure)</li>
@@ -366,6 +431,19 @@
 					</p>
 				</section>
 
+				<section data-background-image="presentation/assets/background/library.jpg" data-background-opacity="0.2">
+					<h3>Database Encryption</h3>
+
+					<p>As of DuckDB 1.4.0, you can encrypt your database files with AES-256-GCM encryption, covering the main database file, WAL, and temp files.</p>
+
+					<pre><code data-trim><script type="text/template">
+						PRAGMA enable_encryption;
+						SET encryption_key = 'my_secret_key';
+					</script></code></pre>
+
+					<p>This does not replace proper access control, but it does protect data at rest from unauthorized file access.</p>
+				</section>
+
 				<section data-background-image="presentation/assets/background/blueprints.jpg" data-background-opacity="0.2">
 					<h3>Security Tips</h3>
 
@@ -440,6 +518,20 @@
 					<p>However, you may run into an issue with updating indexed foreign key constraints. An update may be rewritten as a delete followed by an insert, and that attempted
 						delete will fail if the foreign key constraint is violated.
 					</p>
+				</section>
+
+				<section data-background-image="presentation/assets/background/mallard-grass.jpg" data-background-opacity="0.2">
+					<h3>DuckLake</h3>
+
+					<p>DuckLake is a new open-source lakehouse format from the DuckDB team. Instead of complex file hierarchies (like Iceberg or Delta Lake),
+						DuckLake stores metadata in a SQL database (DuckDB, PostgreSQL, SQLite, or MySQL) with data in Parquet files.</p>
+
+					<ul>
+						<li>True ACID transactions across multiple tables</li>
+						<li>Time-travel queries and schema evolution</li>
+						<li>Built-in encryption</li>
+						<li>Available as a DuckDB extension</li>
+					</ul>
 				</section>
 
 				<section data-background-image="presentation/assets/background/wrappingup.jpg" data-background-opacity="0.2">

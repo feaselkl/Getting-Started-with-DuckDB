@@ -1,6 +1,0 @@
-duckdb
-pandas
-polars
-numpy
-pyodbc
-matplotlib
