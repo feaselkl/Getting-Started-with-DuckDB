@@ -111,7 +111,7 @@
 
 					<img src="presentation/assets/image/DuckDB.png" />
 					
-					<p>DuckDB is a single-user, open-source database for analytical data processing.</p>
+					<p>DuckDB is a (mostly) single-user, open-source database for analytical data processing.</p>
 
 					<p>DuckDB is to data analytics what SQLite is for mobile applications.</p>
 				</section>
@@ -142,7 +142,12 @@
 				<section data-background-image="presentation/assets/background/duck-looking.jpg" data-background-opacity="0.2">
 					<h3>Level-Setting Expectations</h3>
 
-					<p>DuckDB is <strong>NOT</strong> a replacement for enterprise database systems! It is not well-suited for heavy transactional processing, has no concept of role-based access control or logins, and must run in your local environment or container.</p>
+					<p>DuckDB is <strong>NOT</strong> a replacement for enterprise database systems! It is not well-suited for heavy transactional processing,
+						has no concept of role-based access control or logins, and must run in your local environment or container.</p>
+
+					<p>In May 2026, the DuckDB team released Quack a protocol for remote DuckDB access. It is currently in a preview state, so we will not cover
+						it in this talk.
+					</p>
 				</section>
 
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
@@ -224,7 +229,8 @@
 						CALL start_ui();
 					</script></code></pre>
 
-					<p>This opens a notebook interface at <code>http://localhost:4213</code> with syntax highlighting, autocomplete, and a column explorer. All queries run locally, so no data leaves your machine.</p>
+					<p>This opens a notebook interface at <code>http://localhost:4213</code> with syntax highlighting, autocomplete,
+						and a column explorer. All queries run locally, so no data leaves your machine.</p>
 				</section>
 
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
@@ -262,24 +268,6 @@
 					</ul>
 				</section>
 
-				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
-					<h3>MERGE INTO</h3>
-
-					<p>As of DuckDB 1.4.0, DuckDB supports the <code>MERGE INTO</code> statement for upsert operations, with full UPDATE, INSERT, DELETE, and a RETURNING clause.</p>
-
-					<pre><code data-trim><script type="text/template">
-						MERGE INTO target AS t
-						USING source AS s
-						ON t.id = s.id
-						WHEN MATCHED THEN
-							UPDATE SET t.val = s.val
-						WHEN NOT MATCHED THEN
-							INSERT (id, val) VALUES (s.id, s.val);
-					</script></code></pre>
-
-					<p>This should be very familiar to anyone coming from T-SQL!</p>
-				</section>
-
 				<section data-background-image="presentation/assets/background/demo.jpg" data-background-opacity="0.2">
 					<h3>Demo Time</h3>
 				</section>
@@ -314,7 +302,7 @@
 				<section data-background-image="presentation/assets/image/Bubbles.jpg" data-background-opacity="0.4">
 					<h3>Available Settings</h3>
 
-					<p>DuckDB, as of March 2026, has over 100 separate settings available and <a href="https://duckdb.org/docs/stable/configuration/overview.html">documented on their website</a>.
+					<p>DuckDB has over 100 separate settings available and <a href="https://duckdb.org/docs/stable/configuration/overview.html">documented on their website</a>.
 						You can see your current settings using the following command:</p>
 
 					<pre><code data-trim><script type="text/template">
@@ -341,7 +329,7 @@
 					<h3>Managing Secrets</h3>
 
 					<p>The type of secrets you can store will depend upon which extensions you have installed.
-						The set of secrets available as of March 2026 include:</p>
+						Examples of available secret types include:</p>
 
 					<ul>
 						<li>Azure Blob Storage (azure)</li>
