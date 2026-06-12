@@ -7,7 +7,7 @@ dependencies = [
     "pandas",
     "polars",
     "numpy",
-    "pyodbc",
+    "mssql-python",
     "matplotlib",
     "pyarrow"
 ]

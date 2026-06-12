@@ -1,3 +1,4 @@
 2 GB Parquet file: https://cspolybasepublic.blob.core.windows.net/cstrainingpublicdata/ChicagoParkingTickets.parquet
 122 MB sample CSV file: https://cspolybasepublic.blob.core.windows.net/cstrainingpublicdata/ChicagoParkingTickets.txt
 
+Daniel Hutmacher's original database: https://sqlsunday.com/2022/12/05/new-demo-database/
